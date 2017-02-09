@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DailyActivityDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="act_id" />
+    </Key>
+    <Property Name="act_id" Type="int" Nullable="false" />
+    <Property Name="act_sub_cat_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ActivityCategory">
+    <Key>
+      <PropertyRef Name="act_cat_id" />
+    </Key>
+    <Property Name="act_cat_id" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="ActivityDetails">
+    <Key>
+      <PropertyRef Name="act_det_id" />
+    </Key>
+    <Property Name="act_det_id" Type="int" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="act_id" Type="int" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="start_time" Type="time" Precision="7" Nullable="false" />
+    <Property Name="end_time" Type="time" Precision="7" Nullable="false" />
+    <Property Name="location" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="execute_status" Type="bit" Nullable="false" />
+    <Property Name="description" Type="varchar(max)" />
+    <Property Name="cost" Type="int" />
+  </EntityType>
+  <EntityType Name="ActivitySubCategory">
+    <Key>
+      <PropertyRef Name="act_sub_cat_id" />
+    </Key>
+    <Property Name="act_sub_cat_id" Type="int" Nullable="false" />
+    <Property Name="act_cat_id" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="description" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="Job">
+    <Key>
+      <PropertyRef Name="job_id" />
+    </Key>
+    <Property Name="job_id" Type="int" Nullable="false" />
+    <Property Name="jon_name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="user_id" />
+      <PropertyRef Name="job_id" />
+    </Key>
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="user_name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="gender" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="dob" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="pob" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="job_id" Type="int" Nullable="false" />
+    <Property Name="job_place" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="civil_status" Type="bit" Nullable="false" />
+    <Property Name="tel" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_ActivityDetails_Activity">
+    <End Role="Activity" Type="Self.Activity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ActivityDetails" Type="Self.ActivityDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activity">
+        <PropertyRef Name="act_id" />
+      </Principal>
+      <Dependent Role="ActivityDetails">
+        <PropertyRef Name="act_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActivitySubCategory_Activity">
+    <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivitySubCategory">
+        <PropertyRef Name="act_sub_cat_id" />
+      </Principal>
+      <Dependent Role="Activity">
+        <PropertyRef Name="act_sub_cat_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActivitySubCategory_ActivityCategory">
+    <End Role="ActivityCategory" Type="Self.ActivityCategory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivityCategory">
+        <PropertyRef Name="act_cat_id" />
+      </Principal>
+      <Dependent Role="ActivitySubCategory">
+        <PropertyRef Name="act_cat_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_ActivityDetails">
+    <End Role="ActivityDetails" Type="Self.ActivityDetails" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivityDetails">
+        <PropertyRef Name="act_det_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Job">
+    <End Role="Job" Type="Self.Job" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Job">
+        <PropertyRef Name="job_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="job_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DailyActivityDBModelStoreContainer">
+    <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActivityCategory" EntityType="Self.ActivityCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActivityDetails" EntityType="Self.ActivityDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActivitySubCategory" EntityType="Self.ActivitySubCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ActivityDetails_Activity" Association="Self.FK_ActivityDetails_Activity">
+      <End Role="Activity" EntitySet="Activity" />
+      <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActivitySubCategory_Activity" Association="Self.FK_ActivitySubCategory_Activity">
+      <End Role="ActivitySubCategory" EntitySet="ActivitySubCategory" />
+      <End Role="Activity" EntitySet="Activity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActivitySubCategory_ActivityCategory" Association="Self.FK_ActivitySubCategory_ActivityCategory">
+      <End Role="ActivityCategory" EntitySet="ActivityCategory" />
+      <End Role="ActivitySubCategory" EntitySet="ActivitySubCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_ActivityDetails" Association="Self.FK_User_ActivityDetails">
+      <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Job" Association="Self.FK_User_Job">
+      <End Role="Job" EntitySet="Job" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

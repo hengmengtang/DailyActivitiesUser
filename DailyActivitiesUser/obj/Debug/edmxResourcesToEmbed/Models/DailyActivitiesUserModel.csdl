@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DailyActivityDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="act_id" />
+    </Key>
+    <Property Name="act_id" Type="Int32" Nullable="false" />
+    <Property Name="act_sub_cat_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ActivityDetails" Relationship="Self.FK_ActivityDetails_Activity" FromRole="Activity" ToRole="ActivityDetails" />
+    <NavigationProperty Name="ActivitySubCategory" Relationship="Self.FK_ActivitySubCategory_Activity" FromRole="Activity" ToRole="ActivitySubCategory" />
+  </EntityType>
+  <EntityType Name="ActivityCategory">
+    <Key>
+      <PropertyRef Name="act_cat_id" />
+    </Key>
+    <Property Name="act_cat_id" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActivitySubCategories" Relationship="Self.FK_ActivitySubCategory_ActivityCategory" FromRole="ActivityCategory" ToRole="ActivitySubCategory" />
+  </EntityType>
+  <EntityType Name="ActivityDetail">
+    <Key>
+      <PropertyRef Name="act_det_id" />
+    </Key>
+    <Property Name="act_det_id" Type="Int32" Nullable="false" />
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="act_id" Type="Int32" Nullable="false" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="start_time" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="end_time" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="execute_status" Type="Boolean" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="cost" Type="Int32" />
+    <NavigationProperty Name="Activity" Relationship="Self.FK_ActivityDetails_Activity" FromRole="ActivityDetails" ToRole="Activity" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_User_ActivityDetails" FromRole="ActivityDetails" ToRole="User" />
+  </EntityType>
+  <EntityType Name="ActivitySubCategory">
+    <Key>
+      <PropertyRef Name="act_sub_cat_id" />
+    </Key>
+    <Property Name="act_sub_cat_id" Type="Int32" Nullable="false" />
+    <Property Name="act_cat_id" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Activities" Relationship="Self.FK_ActivitySubCategory_Activity" FromRole="ActivitySubCategory" ToRole="Activity" />
+    <NavigationProperty Name="ActivityCategory" Relationship="Self.FK_ActivitySubCategory_ActivityCategory" FromRole="ActivitySubCategory" ToRole="ActivityCategory" />
+  </EntityType>
+  <EntityType Name="Job">
+    <Key>
+      <PropertyRef Name="job_id" />
+    </Key>
+    <Property Name="job_id" Type="Int32" Nullable="false" />
+    <Property Name="jon_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_User_Job" FromRole="Job" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="user_id" />
+      <PropertyRef Name="job_id" />
+    </Key>
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="dob" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="pob" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="job_id" Type="Int32" Nullable="false" />
+    <Property Name="job_place" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="civil_status" Type="Boolean" Nullable="false" />
+    <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ActivityDetail" Relationship="Self.FK_User_ActivityDetails" FromRole="User" ToRole="ActivityDetails" />
+    <NavigationProperty Name="Job" Relationship="Self.FK_User_Job" FromRole="User" ToRole="Job" />
+  </EntityType>
+  <Association Name="FK_ActivityDetails_Activity">
+    <End Role="Activity" Type="Self.Activity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ActivityDetails" Type="Self.ActivityDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activity">
+        <PropertyRef Name="act_id" />
+      </Principal>
+      <Dependent Role="ActivityDetails">
+        <PropertyRef Name="act_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActivitySubCategory_Activity">
+    <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivitySubCategory">
+        <PropertyRef Name="act_sub_cat_id" />
+      </Principal>
+      <Dependent Role="Activity">
+        <PropertyRef Name="act_sub_cat_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ActivitySubCategory_ActivityCategory">
+    <End Role="ActivityCategory" Type="Self.ActivityCategory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivityCategory">
+        <PropertyRef Name="act_cat_id" />
+      </Principal>
+      <Dependent Role="ActivitySubCategory">
+        <PropertyRef Name="act_cat_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_ActivityDetails">
+    <End Role="ActivityDetails" Type="Self.ActivityDetail" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ActivityDetails">
+        <PropertyRef Name="act_det_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Job">
+    <End Role="Job" Type="Self.Job" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Job">
+        <PropertyRef Name="job_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="job_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DailyActivityDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Activities" EntityType="Self.Activity" />
+    <EntitySet Name="ActivityCategories" EntityType="Self.ActivityCategory" />
+    <EntitySet Name="ActivityDetails" EntityType="Self.ActivityDetail" />
+    <EntitySet Name="ActivitySubCategories" EntityType="Self.ActivitySubCategory" />
+    <EntitySet Name="Jobs" EntityType="Self.Job" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_ActivityDetails_Activity" Association="Self.FK_ActivityDetails_Activity">
+      <End Role="Activity" EntitySet="Activities" />
+      <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActivitySubCategory_Activity" Association="Self.FK_ActivitySubCategory_Activity">
+      <End Role="ActivitySubCategory" EntitySet="ActivitySubCategories" />
+      <End Role="Activity" EntitySet="Activities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ActivitySubCategory_ActivityCategory" Association="Self.FK_ActivitySubCategory_ActivityCategory">
+      <End Role="ActivityCategory" EntitySet="ActivityCategories" />
+      <End Role="ActivitySubCategory" EntitySet="ActivitySubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_ActivityDetails" Association="Self.FK_User_ActivityDetails">
+      <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Job" Association="Self.FK_User_Job">
+      <End Role="Job" EntitySet="Jobs" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

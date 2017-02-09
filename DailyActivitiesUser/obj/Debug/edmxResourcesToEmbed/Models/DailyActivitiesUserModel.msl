@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DailyActivityDBModelStoreContainer" CdmEntityContainer="DailyActivityDBEntities">
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.Activity">
+        <MappingFragment StoreEntitySet="Activity">
+          <ScalarProperty Name="act_id" ColumnName="act_id" />
+          <ScalarProperty Name="act_sub_cat_id" ColumnName="act_sub_cat_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActivityCategories">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.ActivityCategory">
+        <MappingFragment StoreEntitySet="ActivityCategory">
+          <ScalarProperty Name="act_cat_id" ColumnName="act_cat_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActivityDetails">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.ActivityDetail">
+        <MappingFragment StoreEntitySet="ActivityDetails">
+          <ScalarProperty Name="act_det_id" ColumnName="act_det_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="act_id" ColumnName="act_id" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="start_time" ColumnName="start_time" />
+          <ScalarProperty Name="end_time" ColumnName="end_time" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="execute_status" ColumnName="execute_status" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActivitySubCategories">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.ActivitySubCategory">
+        <MappingFragment StoreEntitySet="ActivitySubCategory">
+          <ScalarProperty Name="act_sub_cat_id" ColumnName="act_sub_cat_id" />
+          <ScalarProperty Name="act_cat_id" ColumnName="act_cat_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Jobs">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.Job">
+        <MappingFragment StoreEntitySet="Job">
+          <ScalarProperty Name="job_id" ColumnName="job_id" />
+          <ScalarProperty Name="jon_name" ColumnName="jon_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="DailyActivityDBModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="user_name" ColumnName="user_name" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="dob" ColumnName="dob" />
+          <ScalarProperty Name="pob" ColumnName="pob" />
+          <ScalarProperty Name="job_id" ColumnName="job_id" />
+          <ScalarProperty Name="job_place" ColumnName="job_place" />
+          <ScalarProperty Name="civil_status" ColumnName="civil_status" />
+          <ScalarProperty Name="tel" ColumnName="tel" />
+          <ScalarProperty Name="email" ColumnName="email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
