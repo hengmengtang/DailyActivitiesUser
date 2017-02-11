@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DailyActivityDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="act_id" />
+          </Key>
+          <Property Name="act_id" Type="int" Nullable="false" />
+          <Property Name="act_sub_cat_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ActivityCategory">
+          <Key>
+            <PropertyRef Name="act_cat_id" />
+          </Key>
+          <Property Name="act_cat_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ActivityDetails">
+          <Key>
+            <PropertyRef Name="act_det_id" />
+          </Key>
+          <Property Name="act_det_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="act_id" Type="int" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="start_time" Type="time" Precision="7" Nullable="false" />
+          <Property Name="end_time" Type="time" Precision="7" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="execute_status" Type="bit" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
+          <Property Name="cost" Type="int" />
+        </EntityType>
+        <EntityType Name="ActivitySubCategory">
+          <Key>
+            <PropertyRef Name="act_sub_cat_id" />
+          </Key>
+          <Property Name="act_sub_cat_id" Type="int" Nullable="false" />
+          <Property Name="act_cat_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="gender" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="confirmpassword" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ActivityDetails_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityDetails" Type="Self.ActivityDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="act_id" />
+            </Principal>
+            <Dependent Role="ActivityDetails">
+              <PropertyRef Name="act_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivityDetails_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityDetails" Type="Self.ActivityDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="ActivityDetails">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivitySubCategory_Activity">
+          <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActivitySubCategory">
+              <PropertyRef Name="act_sub_cat_id" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="act_sub_cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivitySubCategory_ActivityCategory">
+          <End Role="ActivityCategory" Type="Self.ActivityCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActivityCategory">
+              <PropertyRef Name="act_cat_id" />
+            </Principal>
+            <Dependent Role="ActivitySubCategory">
+              <PropertyRef Name="act_cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DailyActivityDBModelStoreContainer">
+          <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ActivityCategory" EntityType="Self.ActivityCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ActivityDetails" EntityType="Self.ActivityDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ActivitySubCategory" EntityType="Self.ActivitySubCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ActivityDetails_Activity" Association="Self.FK_ActivityDetails_Activity">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivityDetails_UserAccount" Association="Self.FK_ActivityDetails_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivitySubCategory_Activity" Association="Self.FK_ActivitySubCategory_Activity">
+            <End Role="ActivitySubCategory" EntitySet="ActivitySubCategory" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivitySubCategory_ActivityCategory" Association="Self.FK_ActivitySubCategory_ActivityCategory">
+            <End Role="ActivityCategory" EntitySet="ActivityCategory" />
+            <End Role="ActivitySubCategory" EntitySet="ActivitySubCategory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DailyActivityDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="act_id" />
+          </Key>
+          <Property Name="act_id" Type="Int32" Nullable="false" />
+          <Property Name="act_sub_cat_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActivityDetails" Relationship="Self.FK_ActivityDetails_Activity" FromRole="Activity" ToRole="ActivityDetails" />
+          <NavigationProperty Name="ActivitySubCategory" Relationship="Self.FK_ActivitySubCategory_Activity" FromRole="Activity" ToRole="ActivitySubCategory" />
+        </EntityType>
+        <EntityType Name="ActivityCategory">
+          <Key>
+            <PropertyRef Name="act_cat_id" />
+          </Key>
+          <Property Name="act_cat_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ActivitySubCategories" Relationship="Self.FK_ActivitySubCategory_ActivityCategory" FromRole="ActivityCategory" ToRole="ActivitySubCategory" />
+        </EntityType>
+        <EntityType Name="ActivityDetail">
+          <Key>
+            <PropertyRef Name="act_det_id" />
+          </Key>
+          <Property Name="act_det_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="act_id" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="start_time" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="end_time" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="execute_status" Type="Boolean" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="cost" Type="Int32" />
+          <NavigationProperty Name="Activity" Relationship="Self.FK_ActivityDetails_Activity" FromRole="ActivityDetails" ToRole="Activity" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK_ActivityDetails_UserAccount" FromRole="ActivityDetails" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="ActivitySubCategory">
+          <Key>
+            <PropertyRef Name="act_sub_cat_id" />
+          </Key>
+          <Property Name="act_sub_cat_id" Type="Int32" Nullable="false" />
+          <Property Name="act_cat_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activities" Relationship="Self.FK_ActivitySubCategory_Activity" FromRole="ActivitySubCategory" ToRole="Activity" />
+          <NavigationProperty Name="ActivityCategory" Relationship="Self.FK_ActivitySubCategory_ActivityCategory" FromRole="ActivitySubCategory" ToRole="ActivityCategory" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="confirmpassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ActivityDetails" Relationship="Self.FK_ActivityDetails_UserAccount" FromRole="UserAccount" ToRole="ActivityDetails" />
+        </EntityType>
+        <Association Name="FK_ActivityDetails_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityDetails" Type="Self.ActivityDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="act_id" />
+            </Principal>
+            <Dependent Role="ActivityDetails">
+              <PropertyRef Name="act_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivitySubCategory_Activity">
+          <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActivitySubCategory">
+              <PropertyRef Name="act_sub_cat_id" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="act_sub_cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivitySubCategory_ActivityCategory">
+          <End Role="ActivityCategory" Type="Self.ActivityCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivitySubCategory" Type="Self.ActivitySubCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActivityCategory">
+              <PropertyRef Name="act_cat_id" />
+            </Principal>
+            <Dependent Role="ActivitySubCategory">
+              <PropertyRef Name="act_cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActivityDetails_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityDetails" Type="Self.ActivityDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="ActivityDetails">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DailyActivityDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Activities" EntityType="Self.Activity" />
+          <EntitySet Name="ActivityCategories" EntityType="Self.ActivityCategory" />
+          <EntitySet Name="ActivityDetails" EntityType="Self.ActivityDetail" />
+          <EntitySet Name="ActivitySubCategories" EntityType="Self.ActivitySubCategory" />
+          <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
+          <AssociationSet Name="FK_ActivityDetails_Activity" Association="Self.FK_ActivityDetails_Activity">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivitySubCategory_Activity" Association="Self.FK_ActivitySubCategory_Activity">
+            <End Role="ActivitySubCategory" EntitySet="ActivitySubCategories" />
+            <End Role="Activity" EntitySet="Activities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivitySubCategory_ActivityCategory" Association="Self.FK_ActivitySubCategory_ActivityCategory">
+            <End Role="ActivityCategory" EntitySet="ActivityCategories" />
+            <End Role="ActivitySubCategory" EntitySet="ActivitySubCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActivityDetails_UserAccount" Association="Self.FK_ActivityDetails_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="ActivityDetails" EntitySet="ActivityDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DailyActivityDBModelStoreContainer" CdmEntityContainer="DailyActivityDBEntities1">
+          <EntitySetMapping Name="Activities">
+            <EntityTypeMapping TypeName="DailyActivityDBModel.Activity">
+              <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="act_id" ColumnName="act_id" />
+                <ScalarProperty Name="act_sub_cat_id" ColumnName="act_sub_cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActivityCategories">
+            <EntityTypeMapping TypeName="DailyActivityDBModel.ActivityCategory">
+              <MappingFragment StoreEntitySet="ActivityCategory">
+                <ScalarProperty Name="act_cat_id" ColumnName="act_cat_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActivityDetails">
+            <EntityTypeMapping TypeName="DailyActivityDBModel.ActivityDetail">
+              <MappingFragment StoreEntitySet="ActivityDetails">
+                <ScalarProperty Name="act_det_id" ColumnName="act_det_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="act_id" ColumnName="act_id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="start_time" ColumnName="start_time" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="execute_status" ColumnName="execute_status" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="cost" ColumnName="cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActivitySubCategories">
+            <EntityTypeMapping TypeName="DailyActivityDBModel.ActivitySubCategory">
+              <MappingFragment StoreEntitySet="ActivitySubCategory">
+                <ScalarProperty Name="act_sub_cat_id" ColumnName="act_sub_cat_id" />
+                <ScalarProperty Name="act_cat_id" ColumnName="act_cat_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="DailyActivityDBModel.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="confirmpassword" ColumnName="confirmpassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

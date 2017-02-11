@@ -23,6 +23,6 @@ Partial Public Class ActivityDetail
     Public Property cost As Nullable(Of Integer)
 
     Public Overridable Property Activity As Activity
-    Public Overridable Property Users As ICollection(Of User) = New HashSet(Of User)
+    Public Overridable Property UserAccount As UserAccount
 
 End Class
